@@ -32,12 +32,13 @@ procurement-kpi-dashboard/
 ## 📊 Screenshots
 
 ### Excel Pivot Table
+📌 *Note: The screenshot displays only a portion of the PivotTable (for one item category) to maintain readability.*
 
-![Pivot Table](pivot_table_proc.png)
+![Pivot Table](Screenshots/pivot_table_proc.png)
 
 ### Power BI Dashboard
 
-![Power BI](Procurement_KP__dashboard.png)
+![Power BI](Screenshots/Procurement_KP__dashboard.png)
 
 ---
 

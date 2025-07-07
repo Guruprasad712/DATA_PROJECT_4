@@ -24,7 +24,7 @@ This project automates procurement KPI analysis using Excel VBA and presents ins
 procurement-kpi-dashboard/
 ├── Procurement KPI Analysis Dataset.xlsm       # Macro-enabled Excel workbook
 ├── procurement_dashboard.pbix                  # Power BI dashboard file
-├── Code/                                       # (Optional) Exported .bas class modules
+├── Code/                                       # class modules in txt
 └── Screenshots/                                # Screenshots of Pivot Table and Power BI views
 ```
 ---
@@ -33,11 +33,11 @@ procurement-kpi-dashboard/
 
 ### Excel Pivot Table
 
-![Pivot Table](Screenshots/pivot_table.png)
+![Pivot Table](pivot_table_proc.png)
 
 ### Power BI Dashboard
 
-![Power BI](Screenshots/powerbi_dashboard.png)
+![Power BI](Procurement_KP__dashboard.png)
 
 ---
 

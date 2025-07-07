@@ -1,0 +1,144 @@
+Private ws As Worksheet
+Private destws As Worksheet
+
+' Create KPIs
+
+Public Sub SetWs(targetws As Worksheet)
+    
+    Set ws = targetws
+
+End Sub
+
+' Output will be in sheet2 - KPI
+
+Public Sub SetDestWs(targetws As Worksheet)
+
+    Set destws = targetws
+
+End Sub
+
+' Calculate the total spend
+Public Sub Total_spend()
+
+Dim lastrow As Long, lastcol As Long, j As Long, i As Long
+Dim new_col As Long, quant_col As Long, price_col As Long
+
+
+lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+
+
+lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+
+For j = 1 To lastcol
+    If ws.Cells(1, j).Value = "Quantity" Then
+       quant_col = j
+    ElseIf ws.Cells(1, j).Value = "Negotiated_Price" Then
+       price_col = j
+    End If
+Next j
+
+destws.Cells(1, 1).Value = "Total_Spend"
+For i = 2 To lastrow
+    destws.Cells(i, 1).Value = CLng(ws.Cells(i, quant_col) * ws.Cells(i, price_col))
+Next i
+
+End Sub
+' Total savings
+Public Sub Total_savings()
+
+Dim lastrow As Long, lastcol As Long, i As Long, j As Long
+
+lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+
+For i = 1 To lastcol
+   
+   Select Case ws.Cells(1, i).Value
+      Case "Unit_Price"
+         Unit_Price = i
+      Case "Negotiated_Price"
+         neg_price = i
+      Case "Quantity"
+         quant = i
+   End Select
+   
+Next i
+
+destws.Cells(1, 2).Value = "Total_Savings"
+
+For j = 2 To lastrow
+   destws.Cells(j, 2).Value = CLng((ws.Cells(j, Unit_Price).Value - ws.Cells(j, neg_price).Value) * ws.Cells(j, quant).Value)
+Next j
+
+End Sub
+
+' Lead Time
+Public Sub Lead_Time()
+
+Dim lastrow As Long, lastcol As Long, i As Long, j As Long
+
+lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+
+For i = 1 To lastcol
+   
+   Select Case ws.Cells(1, i).Value
+      Case "Order_Date"
+         Order_Date = i
+      Case "Delivery_Date"
+         Delivery_Date = i
+         
+   End Select
+   
+Next i
+
+destws.Cells(1, 3).Value = "Lead_Time"
+
+For j = 2 To lastrow
+
+   If IsEmpty(ws.Cells(j, Order_Date)) Or IsEmpty(ws.Cells(j, Delivery_Date)) Then
+      destws.Cells(j, 3).Value = "NA"
+   Else
+      destws.Cells(j, 3).Value = DateDiff("d", ws.Cells(j, Order_Date), ws.Cells(j, Delivery_Date))
+      
+   End If
+   
+Next j
+
+End Sub
+
+' Average Defective rate
+Public Sub Avg_Defect_Rate()
+
+Dim lastrow As Long, lastcol As Long, i As Long, j As Long
+
+lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+
+For i = 1 To lastcol
+   
+   Select Case ws.Cells(1, i).Value
+      
+      Case "Defective_Units"
+         defects = i
+      Case "Quantity"
+         quant = i
+         
+   End Select
+   
+Next i
+
+destws.Cells(1, 4).Value = "Avg_Defect_Rate"
+
+For j = 2 To lastrow
+
+   destws.Cells(j, 4).Value = (ws.Cells(j, defects).Value / ws.Cells(j, quant).Value)
+   
+destws.Columns(4).NumberFormat = "0.00%"
+
+       
+Next j
+
+End Sub
+
+

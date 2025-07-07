@@ -1,0 +1,43 @@
+' == main module ==
+
+Sub main()
+
+   ' Cleaning the data
+   Dim clean_obj As ClsCleaner
+   Set clean_obj = New ClsCleaner
+   
+   ' Analyzing the Data
+   Dim data_obj As ClsAnalyzer
+   Set data_obj = New ClsAnalyzer
+   
+   ' Create Pivot Table
+   Dim pivot_obj As ClsPivot
+   Set pivot_obj = New ClsPivot
+   
+   ' Clean the data for analysis
+   clean_obj.SetWs ThisWorkbook.Worksheets("PO_sheet")
+   clean_obj.TrimCells
+   clean_obj.blank_rem
+   clean_obj.removedups
+   clean_obj.defectval
+   clean_obj.clong
+   
+   ' Analyze the data
+   data_obj.SetWs ThisWorkbook.Worksheets("PO_sheet")
+   data_obj.SetDestWs ThisWorkbook.Worksheets("KPI")
+   data_obj.Total_spend
+   data_obj.Total_savings
+   data_obj.Lead_Time
+   data_obj.Avg_Defect_Rate
+   
+   ' Create a Pivot Table for Supplier Data
+   
+   pivot_obj.PivotTable
+   
+   MsgBox "Script ran successfully"
+   
+   
+   
+   
+
+End Sub

@@ -1,0 +1,83 @@
+Private ws As Worksheet
+Private destws As Worksheet
+
+
+
+
+' Create a pivot table
+
+Public Sub PivotTable()
+
+   Dim Pws As Worksheet
+   Dim wsTemp As Worksheet, ws As Worksheet, destws As Worksheet
+   
+   Dim Ptable As PivotTable
+   Dim Pcache As PivotCache
+   Dim lastrow As Long, lastcol As Long, ws_lastrow As Long, ws_lastcol As Long, destws_lastrow As Long, destws_lastcol As Long
+   Dim PRange As Range
+   
+   ' Delete old temp sheet if it exists
+   On Error Resume Next
+   Application.DisplayAlerts = False
+   ThisWorkbook.Sheets("Temp_PivotData").Delete
+   Application.DisplayAlerts = True
+   On Error GoTo 0
+
+   ' Add new temporary sheet
+   Set wsTemp = ThisWorkbook.Sheets.Add
+   wsTemp.Name = "Temp_PivotData"
+   
+   Set ws = ThisWorkbook.Sheets("PO_sheet")
+   Set destws = ThisWorkbook.Sheets("KPI")
+   
+   ws_lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+   ws_lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+   
+   destws_lastrow = destws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+   destws_lastcol = destws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+   
+   ws.Range(ws.Cells(1, 1), ws.Cells(1, ws_lastcol)).Copy wsTemp.Cells(1, 1)
+   ws.Range(ws.Cells(2, 1), ws.Cells(ws_lastrow, ws_lastcol)).Copy wsTemp.Cells(2, 1)
+   
+   destws.Range(destws.Cells(1, 1), destws.Cells(1, destws_lastcol)).Copy wsTemp.Cells(1, ws_lastcol + 1)
+   destws.Range(destws.Cells(2, 1), destws.Cells(destws_lastrow, destws_lastcol)).Copy wsTemp.Cells(2, ws_lastcol + 1)
+   
+   
+   
+   ' Add a new sheet for the pivot table
+   Application.DisplayAlerts = False
+   On Error Resume Next
+   Worksheets("PivotTable").Delete
+   Sheets.Add(Before:=ActiveSheet).Name = "PivotTable"
+   Application.DisplayAlerts = True
+   
+   Set Pws = Worksheets("PivotTable")
+   
+   ' Select data for the pivot table
+   lastrow = wsTemp.Cells(wsTemp.Rows.Count, 1).End(xlUp).Row
+   lastcol = wsTemp.Cells(1, wsTemp.Columns.Count).End(xlToLeft).Column
+   Set PRange = wsTemp.Cells(1, 1).Resize(lastrow, lastcol)
+   Set Pcache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=PRange)
+   Set Ptable = Pcache.CreatePivotTable(TableDestination:=Pws.Cells(2, 2), TableName:="SupplierData")
+   
+   ' Insert  supplier data as Row
+   With Ptable
+      .PivotFields("Supplier").Orientation = xlRowField
+      .PivotFields("Item_Category").Orientation = xlColumnField
+   
+      .AddDataField .PivotField("PO_ID"), "Count of Orders", xlCount
+      .AddDataField .PivotFields("Quantity"), "Sum of Quantity", xlSum
+      .AddDataField .PivotFields("Total_Spend"), "Sum of Total Spend", xlSum
+      .AddDataField .PivotFields("Lead_Time"), "Avg Lead Time", xlAverage
+      .AddDataField .PivotFields("Avg_Defect_Rate"), "Avg Defect Rate", xlAverage
+
+   End With
+   
+   ' Delete temporary sheet
+    Application.DisplayAlerts = False
+    wsTemp.Delete
+    Application.DisplayAlerts = True
+   
+End Sub
+
+

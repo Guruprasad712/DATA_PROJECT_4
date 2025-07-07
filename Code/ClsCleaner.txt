@@ -1,0 +1,121 @@
+Private ws As Worksheet
+
+Public Sub SetWs(targetws As Worksheet)
+    
+    Set ws = targetws
+
+End Sub
+
+Public Property Get WsName() As String
+    
+    If ws Is Nothing Then
+       WsName = "Error: ws name not set"
+    Else
+       WsName = ws.Name
+       
+    End If
+    
+End Property
+
+
+' To trim the empty spaces within the cells
+Public Sub TrimCells()
+
+    Dim lastrow As Long, lastcol As Long, i As Long, j As Long
+    If ws Is Nothing Then Exit Sub
+      
+    lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    
+    For i = 2 To lastrow
+        For j = 1 To lastcol
+            Cell = ws.Cells(i, j).Value
+            If Not IsEmpty(Cell) And VarType(Cell) = vbString Then
+                Cell = Trim(Cell)
+            End If
+        Next j
+    Next i
+    
+End Sub
+
+' Remove blank space
+Public Sub blank_rem()
+
+    Dim lastrow As Long, i As Long
+    If ws Is Nothing Then Exit Sub
+    
+    lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    
+    For i = 2 To lastrow
+       If ws.Cells(i, "A").Value = "" Or ws.Cells(i, "B").Value = "" Then
+          ws.Rows(i).Delete
+       End If
+       
+    Next i
+       
+End Sub
+
+' Remove duplicates baseds on column A
+Public Sub removedups()
+
+    Dim lastrow As Long, lastcol As Long
+    Dim DataRange As Range
+    
+    lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastcol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    
+    Set DataRange = ws.Range(ws.Cells(1, 1), ws.Cells(lastrow, lastcol))
+ 
+    DataRange.RemoveDuplicates Columns:=1, Header:=xlYes
+    
+
+End Sub
+' Convert the defect values to 0
+Public Sub defectval()
+    Dim lastrow As Long, i As Long
+    
+    lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    
+    For i = 2 To lastrow
+    
+        If ws.Cells(i, 10).Value = "" Then
+            ws.Cells(i, 10).Value = 0
+        End If
+    
+    Next i
+    
+
+End Sub
+
+
+' Convert the values to their correct data type
+Public Sub clong()
+  
+    
+    Dim lastrow As Long, i As Long, j As Long, l As Long
+    If ws Is Nothing Then Exit Sub
+    
+    lastrow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    
+    For i = 2 To lastrow
+        ' Converting the dates to a standard format
+        For l = 3 To 4
+           If IsDate(ws.Cells(i, l).Value) And ws.Cells(i, l).Value <> "" Then
+              ws.Cells(i, l).Value = CDate(ws.Cells(i, l).Value)
+              ws.Cells(i, l).NumberFormat = "dd-mm-yyyy"
+           End If
+           
+        Next l
+        
+        ' The numbers to long
+        For j = 7 To 9
+           If IsDate(ws.Cells(i, l).Value) And ws.Cells(i, l).Value <> "" Then
+              ws.Cells(i, j).Value = CLng(ws.Cells(i, j).Value)
+           End If
+        
+        Next j
+        
+    Next i
+    
+End Sub
+ 

@@ -25,7 +25,6 @@ procurement-kpi-dashboard/
 ├── Procurement KPI Analysis Dataset.xlsm       # Macro-enabled Excel workbook
 ├── procurement_dashboard.pbix                  # Power BI dashboard file
 ├── Code/                                       # (Optional) Exported .bas class modules
-├── Sample_Data/                                # (Optional) Sample PO input data
 └── Screenshots/                                # Screenshots of Pivot Table and Power BI views
 ```
 ---

@@ -95,11 +95,11 @@ procurement-kpi-dashboard/
 
 ## 👨‍💼 Author
 
-**Guru Prasad**  
-Aspiring Data & Supply Chain Analyst | Passionate about AI and business intelligence.
+**Guruprasad P**  
+Aspiring Data & Supply Chain Analyst | Passionate about AI and Business Intelligence.
 
-🔗 Connect on [LinkedIn](#) *https://www.linkedin.com/in/guruprasad2002/*  
-📬 Email: *[your email here]*
+🔗 Connect on [LinkedIn](https://www.linkedin.com/in/guruprasad2002/) 
+📬 Email: *guruprem2002@gmail.com*
 
 ---
 
